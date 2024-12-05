@@ -92,6 +92,7 @@ fn solve(
         .sum();
     Some(res)
 }
+
 pub fn part_one(input: &str) -> Option<u32> {
     solve(input, 'X', get_xmas)
 }
