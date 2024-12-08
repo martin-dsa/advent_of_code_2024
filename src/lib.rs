@@ -9,10 +9,12 @@ pub fn add_signed_to_usize(value: usize, offset: i32) -> Option<usize> {
         value.checked_sub((-offset) as usize)
     }
 }
+
 pub struct CharWithIndex {
     pub character: char,
     pub position: (usize, usize),
 }
+
 pub fn get_next_letter(
     matrix: &[Vec<char>],
     start_index: (usize, usize),
@@ -29,4 +31,13 @@ pub fn get_next_letter(
                 })
             })
         })
+}
+
+pub fn are_collinear(p1: &(i32, i32), p2: &(i32, i32), p3: &(i32, i32)) -> bool {
+    let (x1, y1) = p1;
+    let (x2, y2) = p2;
+    let (x3, y3) = p3;
+
+    // Check if the determinant is zero
+    x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2) == 0
 }
