@@ -25,7 +25,10 @@ fn sort_update(rules_map: &HashMap<u32, Vec<u32>>, update: &[u32]) -> Vec<u32> {
 }
 
 fn parse_data(input: &str) -> (HashMap<u32, Vec<u32>>, impl Iterator<Item = Vec<u32>> + '_) {
-    let (rules, updates) = input.split_once("\n\n").unwrap();
+    let (rules, updates) = input
+        .split_once("\n\n")
+        .or_else(|| input.split_once("\r\n\r\n"))
+        .unwrap();
 
     let rules_map = rules
         .lines()
