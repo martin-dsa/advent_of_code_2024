@@ -17,7 +17,7 @@ fn turn_right(dir: (i32, i32)) -> (i32, i32) {
     }
 }
 
-fn get_visited(grid: &[Vec<char>]) -> Option<u32> {
+fn get_visited(grid: &[Vec<char>]) -> HashSet<(usize, usize)> {
     let mut position = grid
         .iter()
         .enumerate()
@@ -36,7 +36,7 @@ fn get_visited(grid: &[Vec<char>]) -> Option<u32> {
     while let Some(next_char) = get_next_letter(grid, position, direction, 1) {
         if next_char.character == OBSTRUCTION {
             if !turned && visited_turns.contains(&position) {
-                return None;
+                return HashSet::new();
             }
             turned = true;
             direction = turn_right(direction);
@@ -48,13 +48,13 @@ fn get_visited(grid: &[Vec<char>]) -> Option<u32> {
         visited.insert(position);
     }
 
-    Some(visited.len() as u32)
+    visited
 }
 
 pub fn part_one(input: &str) -> Option<u32> {
     let grid: Vec<Vec<char>> = input.lines().map(|l| l.chars().collect()).collect();
 
-    get_visited(&grid)
+    Some(get_visited(&grid).len() as u32)
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
@@ -63,23 +63,24 @@ pub fn part_two(input: &str) -> Option<u32> {
 
     let mut handles = Vec::<std::thread::JoinHandle<u32>>::new();
 
-    let len = grid.len();
+    let visited = get_visited(&grid).into_iter().collect::<Vec<_>>();
 
-    for i in 0..len {
+    let chunks: Vec<Vec<(usize, usize)>> =
+        visited.chunks(100).map(|chunk| chunk.to_vec()).collect();
+
+    for chunk in chunks {
         let grid = Arc::clone(&grid);
         let handle = thread::spawn(move || {
             let mut loop_count = 0;
-            for j in 0..len {
-                let char_to_replace_with_obstruction = grid[i][j];
-                if char_to_replace_with_obstruction == OBSTRUCTION
-                    || char_to_replace_with_obstruction == GUARD
-                {
+            for position in chunk {
+                let char_to_replace_with_obstruction = grid[position.0][position.1];
+                if char_to_replace_with_obstruction == GUARD {
                     continue;
                 }
                 let mut temp_grid = (*grid).clone();
-                temp_grid[i][j] = OBSTRUCTION;
+                temp_grid[position.0][position.1] = OBSTRUCTION;
                 let visited = get_visited(&temp_grid);
-                if visited.is_none() {
+                if visited.is_empty() {
                     loop_count += 1;
                 }
             }
