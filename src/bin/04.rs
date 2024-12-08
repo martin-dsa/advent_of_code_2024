@@ -1,26 +1,6 @@
+use advent_of_code::get_next_letter;
+
 advent_of_code::solution!(4);
-
-fn add_signed_to_usize(value: usize, offset: i32) -> Option<usize> {
-    if offset >= 0 {
-        value.checked_add(offset as usize)
-    } else {
-        value.checked_sub((-offset) as usize)
-    }
-}
-
-fn get_next_letter(
-    matrix: &[Vec<char>],
-    start_index: (usize, usize),
-    direction: (i32, i32),
-    distance: i32,
-) -> Option<&char> {
-    add_signed_to_usize(start_index.0, direction.0 * distance)
-        .and_then(|row_index| matrix.get(row_index))
-        .and_then(|row| {
-            add_signed_to_usize(start_index.1, direction.1 * distance)
-                .and_then(|col_index| row.get(col_index))
-        })
-}
 
 fn get_xmas(x_index: (usize, usize), matrix: &[Vec<char>]) -> u32 {
     let mut count = 0;
@@ -35,7 +15,7 @@ fn get_xmas(x_index: (usize, usize), matrix: &[Vec<char>]) -> u32 {
                 if let Some(next_letter) =
                     get_next_letter(matrix, x_index, (x_dir, y_dir), distance)
                 {
-                    xmas.push(*next_letter);
+                    xmas.push(next_letter.character);
                 }
             }
 
@@ -57,7 +37,7 @@ fn get_x_mas(a_index: (usize, usize), matrix: &[Vec<char>]) -> u32 {
                 continue;
             }
             if let Some(next_letter) = get_next_letter(matrix, a_index, (x_dir, y_dir), 1) {
-                xmas.push(*next_letter);
+                xmas.push(next_letter.character);
             }
         }
     }
