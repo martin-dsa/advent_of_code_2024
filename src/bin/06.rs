@@ -1,6 +1,6 @@
 use std::{collections::HashSet, sync::Arc, thread};
 
-use advent_of_code::get_next_letter;
+use advent_of_code::get_next_cell;
 
 advent_of_code::solution!(6);
 
@@ -33,8 +33,8 @@ fn get_visited(grid: &[Vec<char>]) -> HashSet<(usize, usize)> {
     let mut visited_turns: HashSet<(usize, usize)> = HashSet::new();
     let mut turned = false;
 
-    while let Some(next_char) = get_next_letter(grid, position, direction, 1) {
-        if next_char.character == OBSTRUCTION {
+    while let Some(next_char) = get_next_cell(grid, position, direction, 1) {
+        if next_char.value == OBSTRUCTION {
             if !turned && visited_turns.contains(&position) {
                 return HashSet::new();
             }

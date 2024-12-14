@@ -1,4 +1,4 @@
-use advent_of_code::get_next_letter;
+use advent_of_code::get_next_cell;
 
 advent_of_code::solution!(4);
 
@@ -12,10 +12,9 @@ fn get_xmas(x_index: (usize, usize), matrix: &[Vec<char>]) -> u32 {
             }
             let mut xmas = "X".to_string();
             for distance in 1..=3 {
-                if let Some(next_letter) =
-                    get_next_letter(matrix, x_index, (x_dir, y_dir), distance)
+                if let Some(next_letter) = get_next_cell(matrix, x_index, (x_dir, y_dir), distance)
                 {
-                    xmas.push(next_letter.character);
+                    xmas.push(next_letter.value);
                 }
             }
 
@@ -36,8 +35,8 @@ fn get_x_mas(a_index: (usize, usize), matrix: &[Vec<char>]) -> u32 {
             if x_dir == 0 || y_dir == 0 {
                 continue;
             }
-            if let Some(next_letter) = get_next_letter(matrix, a_index, (x_dir, y_dir), 1) {
-                xmas.push(next_letter.character);
+            if let Some(next_letter) = get_next_cell(matrix, a_index, (x_dir, y_dir), 1) {
+                xmas.push(next_letter.value);
             }
         }
     }

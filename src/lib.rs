@@ -12,23 +12,24 @@ pub fn add_signed_to_usize(value: usize, offset: i32) -> Option<usize> {
     }
 }
 
-pub struct CharWithIndex {
-    pub character: char,
+#[derive(Debug, PartialEq, Eq, Hash, Copy, Clone)]
+pub struct CharWithIndex<T> {
+    pub value: T,
     pub position: (usize, usize),
 }
 
-pub fn get_next_letter(
-    matrix: &[Vec<char>],
+pub fn get_next_cell<T: Copy>(
+    matrix: &[Vec<T>],
     start_index: (usize, usize),
     direction: (i32, i32),
     distance: i32,
-) -> Option<CharWithIndex> {
+) -> Option<CharWithIndex<T>> {
     add_signed_to_usize(start_index.0, direction.0 * distance)
         .and_then(|row_index| matrix.get(row_index).map(|row| (row, row_index)))
         .and_then(|(row, row_index)| {
             add_signed_to_usize(start_index.1, direction.1 * distance).and_then(|col_index| {
                 row.get(col_index).map(|c| CharWithIndex {
-                    character: *c,
+                    value: *c,
                     position: (row_index, col_index),
                 })
             })
