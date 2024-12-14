@@ -1,3 +1,5 @@
+use num::Num;
+
 pub mod template;
 
 // Use this file to add helper functions and additional modules.
@@ -40,4 +42,10 @@ pub fn are_collinear(p1: &(i32, i32), p2: &(i32, i32), p3: &(i32, i32)) -> bool 
 
     // Check if the determinant is zero
     x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2) == 0
+}
+
+#[derive(Debug, PartialEq, Eq, Hash, Copy, Clone)]
+pub struct Vec2<T: Num> {
+    pub x: T,
+    pub y: T,
 }
